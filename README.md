@@ -1,53 +1,41 @@
-# Unity Template Project for Built-in RP
+# Space Portal Shader
 
-{{YOUR_PROJECT_DESCRIPTION_HERE}} in **Unity 2021.3.10f1**
-
-### References
-
-- [Ref](https://adrianb.io/2014/08/09/perlinnoise.html)
-- [Ref](https://adrianb.io/2014/08/09/perlinnoise.html)
+Using **Stencil Buffer**, **AlphaToMask** and **Shuriken** Particle System in **Unity 2021.3.10f1**
 
 ## Screenshots
 
-![Gif](./docs/1.gif)
-![Gif](./docs/1.gif)
+## Table of Contents
 
-## Features
+- [Implementation](#implementation)
+  - [Modeling in Blender](#modeling-in-blender)
+  - [Portal Mask Shader](#portal-mask-shader)
+  - [Hemisphere Shader](#hemisphere-shader)
+  - [Tunnel Shader](#tunnel-shader)
+  - [Glow Shader](#glow-shader)
+  - [Particle System](#particle-system)
+    - [Particles Shader](#particles-shader)
 
-- [Feature](#feature)
-- [Feature](#feature)
-- [Feature](#feature)
+### References
 
----
+- [Space Portal Shader tutorial by Jettelly](https://www.youtube.com/watch?v=toQIuCtk2pI)
+- [Space Texture](https://unsplash.com/photos/qtRF_RxCAo0)
 
-## Feature
+## Implementation
 
-1. Implementation detail.
-1. Implementation detail.
-1. Implementation detail.
+### Modeling in Blender
 
-![Gif](./docs/1.gif)
-![Gif](./docs/1.gif)
+- Model a Hemisphere and a Tunnel.
+- Make sure the UVs are mapped in a cylindrical mapping for the tube, so the vortex effect can be animated across the UV.y coordinates.
 
-## Feature
+![Picture](./docs/1.jpg)
+![Picture](./docs/2.jpg)
 
-1. Implementation detail.
-1. Implementation detail.
-1. Implementation detail.
+### Hemisphere Shader
 
-![Gif](./docs/1.gif)
-![Gif](./docs/1.gif)
+### Tunnel Shader
 
----
+### Glow Shader
 
-## Implementation explained
+### Particle Shader
 
-1. **Step**
-
-   1. Sub Step.
-   1. Sub Step.
-
-1. **Step**
-
-   1. Sub Step.
-   1. Sub Step.
+#### Particles Shader
