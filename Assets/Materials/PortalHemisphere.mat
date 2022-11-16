@@ -85,7 +85,7 @@ Material:
     - _TimeVelocity: 1
     - _UVSec: 0
     - _UseTime: 1
-    - _Velocity: 0.005
+    - _Velocity: 0.01
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

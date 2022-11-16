@@ -4,6 +4,8 @@ Using **Stencil Buffer**, **AlphaToMask** and **Shuriken** Particle System in **
 
 ## Screenshots
 
+![Picture](./docs/9.jpg)
+
 ## Table of Contents
 
 - [Implementation](#implementation)
