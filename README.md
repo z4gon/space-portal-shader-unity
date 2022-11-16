@@ -39,7 +39,6 @@ Using **Stencil Buffer**, **AlphaToMask** and **Shuriken** Particle System in **
 - Stripes slightly inclined, matching in the sides, to make a helicoidal Tunnel.
 
 ![Picture](./docs/3.jpg)
-![Picture](./docs/4.jpg)
 
 ### Portal Mask Shader
 
@@ -77,15 +76,26 @@ fixed4 frag (Varyings IN) : SV_Target
 }
 ```
 
-![Picture](./docs/5.jpg)
+![Picture](./docs/4.jpg)
 
 ### Tunnel Shader
+
+- Parametrize the Color, Intensity, Fade Start, Fade Thickness and Velocity.
+
+```c
+_MainTex ("Texture", 2D) = "white" {}
+_Color ("Color", Color) = (0,0,0,1)
+_Velocity ("Velocity", Float) = 1
+_Intensity ("Intensity", Float) = 1
+_FadePosition ("Fade Position", Range(0.0, 1.0)) = 0.5
+_FadeThickness ("Fade Thickness", Range(0.0, 1.0)) = 0.2
+```
 
 - Use `RenderType` `Transparent` to be able to use the transparency in the alpha channel.
 - Use `Queue` `Transparent+2` to make it render in front of the mask by two levels.
 - `Cull Front` to only render the inner faces of the tunnel.
 - Use `ZWrite Off` to make this truly transparent, and not write to the depth buffer, affecting other shaders.
-- Use `Blend SrcAlpha OneMinusSrcAlpha` for traditional transparency.
+- Use `Blend SrcAlpha One` for additive transparency.
 - Do a `Stencil Test` against the **Stencil Buffer**, check if the value is equals to 2, which is the value set by the shader that does the mask.
 
 ```c
@@ -95,7 +105,7 @@ Cull Front
 
 ZWrite Off
 
-Blend SrcAlpha OneMinusSrcAlpha
+Blend SrcAlpha One
 
 Stencil
 {
@@ -106,7 +116,8 @@ Stencil
 
 - Animate the tunnel across the **UV.y** coordinate.
 - Use **\_Time** to displace the UV coordinates.
-- Parametrize the **Velocity** and the **Color** of the Tunnel animation.
+- **smoothstep()** to determine the fade out of the tunnel.
+- Use the parametrized **Velocity**, **Color** and **Intensity**.
 
 ```c
 fixed4 frag (Varyings IN) : SV_Target
@@ -116,13 +127,37 @@ fixed4 frag (Varyings IN) : SV_Target
 
     // sample the texture
     fixed4 col = tex2D(_MainTex, uv);
-    return col * _Color;
+    col = col * _Color * _Intensity;
+
+    // fade out towards the higher UV.y values
+    float alpha = col.a * smoothstep(_FadePosition, _FadePosition + _FadeThickness, IN.uv.y);
+
+    return fixed4(col.rgb, alpha);
+}
+```
+
+![Picture](./docs/5.jpg)
+
+### Hemisphere Shader
+
+- Use `RenderType` `Opaque`.
+- Use `Queue` `Transparent+1` to make it render in between the mask and the tunnel.
+- `Cull Front` to only render the inner faces of the hemisphere.
+- Do a `Stencil Test` against the **Stencil Buffer**, check if the value is equals to 2, which is the value set by the shader that does the mask.
+
+```c
+Tags { "RenderType"="Opaque" "Queue"="Transparent+1" }
+
+Cull Front
+
+Stencil
+{
+    Ref 2
+    Comp Equal
 }
 ```
 
 ![Picture](./docs/6.jpg)
-
-### Hemisphere Shader
 
 ### Glow Shader
 

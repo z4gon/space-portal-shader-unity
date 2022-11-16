@@ -1,4 +1,4 @@
-Shader "Portal/PortalHemisphere"
+Shader "Portal/PortalTunnel"
 {
     Properties
     {
@@ -6,9 +6,16 @@ Shader "Portal/PortalHemisphere"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        Cull Back
-        Blend SrcAlpha OneMinusSrcAlpha
+        Tags { "RenderType"="Opaque" "Queue"="Transparent+1" }
+
+        Cull Front
+
+        Stencil
+        {
+            Ref 2
+            Comp Equal
+        }
+
         LOD 100
 
         Pass

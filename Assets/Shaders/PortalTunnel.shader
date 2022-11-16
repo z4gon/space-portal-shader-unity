@@ -5,6 +5,9 @@ Shader "Portal/PortalTunnel"
         _MainTex ("Texture", 2D) = "white" {}
         _Color ("Color", Color) = (0,0,0,1)
         _Velocity ("Velocity", Float) = 1
+        _Intensity ("Intensity", Float) = 1
+        _FadePosition ("Fade Position", Range(0.0, 1.0)) = 0.5
+        _FadeThickness ("Fade Thickness", Range(0.0, 1.0)) = 0.2
     }
     SubShader
     {
@@ -14,7 +17,7 @@ Shader "Portal/PortalTunnel"
 
         ZWrite Off
 
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend SrcAlpha One
 
         Stencil
         {
@@ -49,6 +52,9 @@ Shader "Portal/PortalTunnel"
 
             fixed4 _Color;
             float _Velocity;
+            float _Intensity;
+            float _FadePosition;
+            float _FadeThickness;
 
             Varyings vert (Attributes IN)
             {
@@ -65,7 +71,12 @@ Shader "Portal/PortalTunnel"
 
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, uv);
-                return col * _Color;
+                col = col * _Color * _Intensity;
+
+                // fade out towards the higher UV.y values
+                float alpha = col.a * smoothstep(_FadePosition, _FadePosition + _FadeThickness, IN.uv.y);
+
+                return fixed4(col.rgb, alpha);
             }
             ENDCG
         }
