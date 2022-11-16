@@ -39,6 +39,7 @@ Using **Stencil Buffer**, **AlphaToMask** and **Shuriken** Particle System in **
 - Stripes slightly inclined, matching in the sides, to make a helicoidal Tunnel.
 
 ![Picture](./docs/3.jpg)
+![Picture](./docs/4.jpg)
 
 ### Portal Mask Shader
 
@@ -76,7 +77,7 @@ fixed4 frag (Varyings IN) : SV_Target
 }
 ```
 
-![Picture](./docs/4.jpg)
+![Picture](./docs/5.jpg)
 
 ### Tunnel Shader
 
@@ -103,7 +104,23 @@ Stencil
 }
 ```
 
-![Picture](./docs/4.jpg)
+- Animate the tunnel across the **UV.y** coordinate.
+- Use **\_Time** to displace the UV coordinates.
+- Parametrize the **Velocity** and the **Color** of the Tunnel animation.
+
+```c
+fixed4 frag (Varyings IN) : SV_Target
+{
+    // offset across y coordinate in uvs to animate the helicoidal tunnel
+    float2 uv = float2(IN.uv.x, IN.uv.y + (_Time.y * _Velocity));
+
+    // sample the texture
+    fixed4 col = tex2D(_MainTex, uv);
+    return col * _Color;
+}
+```
+
+![Picture](./docs/6.jpg)
 
 ### Hemisphere Shader
 

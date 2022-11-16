@@ -3,6 +3,8 @@ Shader "Portal/PortalTunnel"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (0,0,0,1)
+        _Velocity ("Velocity", Float) = 1
     }
     SubShader
     {
@@ -45,6 +47,9 @@ Shader "Portal/PortalTunnel"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
+            fixed4 _Color;
+            float _Velocity;
+
             Varyings vert (Attributes IN)
             {
                 Varyings OUT;
@@ -55,9 +60,12 @@ Shader "Portal/PortalTunnel"
 
             fixed4 frag (Varyings IN) : SV_Target
             {
+                // offset across y coordinate in uvs to animate the helicoidal tunnel
+                float2 uv = float2(IN.uv.x, IN.uv.y + (_Time.y * _Velocity));
+
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, IN.uv);
-                return col;
+                fixed4 col = tex2D(_MainTex, uv);
+                return col * _Color;
             }
             ENDCG
         }
