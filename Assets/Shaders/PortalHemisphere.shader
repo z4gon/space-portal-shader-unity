@@ -1,4 +1,4 @@
-Shader "Portal/PortalTunnel"
+Shader "Portal/PortalHemisphere"
 {
     Properties
     {

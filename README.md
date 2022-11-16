@@ -15,6 +15,7 @@ Using **Stencil Buffer**, **AlphaToMask** and **Shuriken** Particle System in **
   - [Glow Shader](#glow-shader)
   - [Particle System](#particle-system)
     - [Particles Shader](#particles-shader)
+      - [Color Over Time](#color-over-time)
 
 ### References
 
@@ -187,6 +188,65 @@ Blend SrcAlpha One
 
 ![Picture](./docs/7.jpg)
 
-### Particle Shader
+### Particle System
+
+- Add a particle system that spawns particles inside the tunnel.
+- Adjust velocity, force over time, color over time.
 
 #### Particles Shader
+
+- Use `RenderType` `Transparent` to be able to use the transparency in the alpha channel.
+- Use `Queue` `Transparent+3` to render it on top of everything.
+- Use `ZWrite Off` to make this truly transparent, and not write to the depth buffer, affecting other shaders.
+- Use `Blend SrcAlpha One` for additive transparency.
+- Do a `Stencil Test` against the **Stencil Buffer**, check if the value is equals to 2, which is the value set by the shader that does the mask.
+
+```c
+Tags { "RenderType"="Opaque" "Queue"="Transparent+1" }
+
+Cull Front
+
+Stencil
+{
+    Ref 2
+    Comp Equal
+}
+```
+
+##### Color Over Time
+
+- The Particle System needs a defined property in the vertex for the color.
+- That way the `Color Over Time` value gets passed down to the vertex and fragment shaders.
+- It then can be multiplied by our frag calculated color.
+
+```c
+struct Attributes
+{
+    ...
+    fixed4 color        : COLOR;
+};
+
+struct Varyings
+{
+    ...
+    fixed4 color        : COLOR;
+};
+
+
+Varyings vert (Attributes IN)
+{
+    ...
+    OUT.color = IN.color;
+    ...
+}
+
+fixed4 frag (Varyings IN) : SV_Target
+{
+    ...
+    // sample the texture
+    fixed4 texel = tex2D(_MainTex, IN.uv);
+    return texel * IN.color * _Color * _Intensity;
+}
+```
+
+![Picture](./docs/8.jpg)
