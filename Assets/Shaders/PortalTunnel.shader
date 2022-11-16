@@ -6,9 +6,20 @@ Shader "Portal/PortalTunnel"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        Cull Back
+        Tags { "RenderType"="Transparent" "Queue"="Transparent+2" }
+
+        Cull Front
+
+        ZWrite Off
+
         Blend SrcAlpha OneMinusSrcAlpha
+
+        Stencil
+        {
+            Ref 2
+            Comp Equal
+        }
+
         LOD 100
 
         Pass

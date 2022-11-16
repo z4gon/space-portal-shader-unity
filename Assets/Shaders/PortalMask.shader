@@ -7,8 +7,18 @@ Shader "Portal/PortalMask"
     SubShader
     {
         Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        Cull Back
+
+        ZWrite Off
+
         Blend SrcAlpha OneMinusSrcAlpha
+
+        Stencil
+        {
+            Ref 2
+            Comp Always
+            Pass Replace
+        }
+
         LOD 100
 
         Pass
@@ -46,7 +56,10 @@ Shader "Portal/PortalMask"
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, IN.uv);
-                return col;
+
+                if (col.a < 0.1) discard;
+
+                return fixed4(0, 0, 0, col.a);
             }
             ENDCG
         }
