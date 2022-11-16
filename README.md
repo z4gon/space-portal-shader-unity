@@ -19,7 +19,7 @@ Using **Stencil Buffer**, **AlphaToMask** and **Shuriken** Particle System in **
 ### References
 
 - [Space Portal Shader tutorial by Jettelly](https://www.youtube.com/watch?v=toQIuCtk2pI)
-- [Space Texture](https://unsplash.com/photos/HNkgPFBShSw)
+- [Space Texture](https://unsplash.com/photos/qtRF_RxCAo0)
 - [AlphaTest before writing to the Stencil Buffer](https://answers.unity.com/questions/759345/is-it-possible-to-alphatest-prior-to-writing-to-th.html)
 
 ## Implementation
