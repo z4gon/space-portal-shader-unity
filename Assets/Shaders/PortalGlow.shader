@@ -3,12 +3,17 @@ Shader "Portal/PortalGlow"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (0,0,0,1)
+        _Intensity ("Intensity", Float) = 1
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        Cull Back
-        Blend SrcAlpha OneMinusSrcAlpha
+        Tags { "RenderType"="Transparent" "Queue"="Transparent+3" }
+
+        ZWrite Off
+
+        Blend SrcAlpha One
+
         LOD 100
 
         Pass
@@ -34,6 +39,9 @@ Shader "Portal/PortalGlow"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
+            fixed4 _Color;
+            float _Intensity;
+
             Varyings vert (Attributes IN)
             {
                 Varyings OUT;
@@ -46,6 +54,7 @@ Shader "Portal/PortalGlow"
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, IN.uv);
+                col = col * _Color * _Intensity;
                 return col;
             }
             ENDCG

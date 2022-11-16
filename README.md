@@ -19,7 +19,7 @@ Using **Stencil Buffer**, **AlphaToMask** and **Shuriken** Particle System in **
 ### References
 
 - [Space Portal Shader tutorial by Jettelly](https://www.youtube.com/watch?v=toQIuCtk2pI)
-- [Space Texture](https://unsplash.com/photos/qtRF_RxCAo0)
+- [Space Texture](https://unsplash.com/photos/HNkgPFBShSw)
 - [AlphaTest before writing to the Stencil Buffer](https://answers.unity.com/questions/759345/is-it-possible-to-alphatest-prior-to-writing-to-th.html)
 
 ## Implementation
@@ -157,9 +157,35 @@ Stencil
 }
 ```
 
+- Use the parametrized **Velocity** and **Color**.
+
+```c
+fixed4 frag (Varyings IN) : SV_Target
+{
+    // sample the texture
+    fixed4 col = tex2D(_MainTex, IN.uv + (_Time.y * _Velocity));
+    return col * _Color;
+}
+```
+
 ![Picture](./docs/6.jpg)
 
 ### Glow Shader
+
+- Use `RenderType` `Transparent` to be able to use the transparency in the alpha channel.
+- Use `Queue` `Transparent+3` to render it on top of everything.
+- Use `ZWrite Off` to make this truly transparent, and not write to the depth buffer, affecting other shaders.
+- Use `Blend SrcAlpha One` for additive transparency.
+
+```c
+Tags { "RenderType"="Transparent" "Queue"="Transparent+3" }
+
+ZWrite Off
+
+Blend SrcAlpha One
+```
+
+![Picture](./docs/7.jpg)
 
 ### Particle Shader
 

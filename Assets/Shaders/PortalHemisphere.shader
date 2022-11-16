@@ -3,6 +3,8 @@ Shader "Portal/PortalTunnel"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Velocity ("Velocity", Float) = 1
+        _Color ("Color", Color) = (0,0,0,1)
     }
     SubShader
     {
@@ -40,6 +42,8 @@ Shader "Portal/PortalTunnel"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float _Velocity;
+            fixed4 _Color;
 
             Varyings vert (Attributes IN)
             {
@@ -52,8 +56,8 @@ Shader "Portal/PortalTunnel"
             fixed4 frag (Varyings IN) : SV_Target
             {
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, IN.uv);
-                return col;
+                fixed4 col = tex2D(_MainTex, IN.uv + (_Time.y * _Velocity));
+                return col * _Color;
             }
             ENDCG
         }
